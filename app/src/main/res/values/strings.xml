@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TO-DO MVP App</string>
+    <string name="information">Información</string>
+    <string name="remove_all">Eliminar Todos</string>
+    <string name="add_element">Agregar elemento</string>
+    <string name="buy_vegetables">Comprar verduras</string>
+    <string name="empty_items">No hay elementos cargadso</string>
+</resources>
