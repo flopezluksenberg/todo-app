@@ -3,6 +3,7 @@ package com.flopezluksenberg.todo.todolist
 import com.flopezluksenberg.todo.TodoItem
 
 class TodoListPresenter(private var view: TodoListView?, private val interactor: TodoItemsInteractor, savedItems: List<TodoItem>? = null) : TodoItemsInteractor.Listener {
+
     init {
         view?.showLoading()
         savedItems?.apply {
