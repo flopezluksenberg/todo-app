@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.flopezluksenberg.todo.TodoItem
+import org.jetbrains.anko.doAsync
 
 class TodoItemsRepository(private val sharedPreferences: SharedPreferences, private val objectMapper: ObjectMapper) : TodoItemsInteractor {
     companion object {
@@ -16,15 +17,17 @@ class TodoItemsRepository(private val sharedPreferences: SharedPreferences, priv
     }
 
     override fun getItems(listener: TodoItemsInteractor.Listener) {
-        try {
-            val itemsString = sharedPreferences.getString(ITEMS, null)
-            if (itemsString != null) {
-                listener.onGetItemsSuccess(objectMapper.readValue(itemsString, object : TypeReference<List<TodoItem>>() {}))
-            } else {
-                listener.onGetItemsNotSuccess()
+        doAsync {
+            try {
+                val itemsString = sharedPreferences.getString(ITEMS, null)
+                if (itemsString != null) {
+                    listener.onGetItemsSuccess(objectMapper.readValue(itemsString, object : TypeReference<List<TodoItem>>() {}))
+                } else {
+                    listener.onGetItemsNotSuccess()
+                }
+            } catch (e: Exception) {
+                listener.onGetItemsFailure()
             }
-        } catch (e: Exception) {
-            listener.onGetItemsFailure()
         }
     }
 

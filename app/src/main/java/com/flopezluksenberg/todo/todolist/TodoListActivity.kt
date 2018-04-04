@@ -81,65 +81,84 @@ class TodoListActivity : AppCompatActivity(), TodoListView, AddItemDialogFragmen
 
     //TodoListView
     override fun showItemBlankDialog() {
-        alertDialog = alert("No puede añadir un item sin texto", "Item vacio") {
-            okButton {
-                alertDialog = null
-                it.dismiss()
-            }
-        }.show()
+        runOnUiThread {
+            alertDialog = alert("No puede añadir un item sin texto", "Item vacio") {
+                okButton {
+                    alertDialog = null
+                    it.dismiss()
+                }
+            }.show()
+        }
     }
 
     override fun addTodoItem(item: TodoItem) {
-        (rclTodoItems?.adapter as? TodoItemAdapter)?.addItem(item)
+        runOnUiThread {
+            (rclTodoItems?.adapter as? TodoItemAdapter)?.addItem(item)
+        }
     }
 
     override fun setTodoItems(items: List<TodoItem>) {
-        (rclTodoItems?.adapter as? TodoItemAdapter)?.setItems(items)
+        runOnUiThread {
+            (rclTodoItems?.adapter as? TodoItemAdapter)?.setItems(items)
+        }
     }
 
     override fun showLoading() {
-        relLoading?.visibility = View.VISIBLE
-        fabAddItem.visibility = View.GONE
+        runOnUiThread {
+            relLoading?.visibility = View.VISIBLE
+            fabAddItem.visibility = View.GONE
+        }
     }
 
     override fun hideLoading() {
-        relLoading?.visibility = View.GONE
-        fabAddItem.visibility = View.VISIBLE
+        runOnUiThread {
+            relLoading?.visibility = View.GONE
+            fabAddItem.visibility = View.VISIBLE
+        }
     }
 
     override fun getItems(): List<TodoItem> = (rclTodoItems.adapter as TodoItemAdapter).getItems()
 
     override fun deleteAllItems() {
-        (rclTodoItems.adapter as TodoItemAdapter).setItems(listOf())
+        runOnUiThread {
+            (rclTodoItems.adapter as TodoItemAdapter).setItems(listOf())
+        }
     }
 
     override fun deleteItem(todoItem: TodoItem) {
-        (rclTodoItems.adapter as TodoItemAdapter).deleteItem(todoItem)
+        runOnUiThread {
+            (rclTodoItems.adapter as TodoItemAdapter).deleteItem(todoItem)
+        }
     }
 
     override fun showInfo() {
-        val adapter = (rclTodoItems.adapter as TodoItemAdapter)
-        val itemsCheckedCount = adapter.countChecked()
-        val percent = if (adapter.getItems().isEmpty()) 100 else (itemsCheckedCount * 100) / adapter.getItems().size
+        runOnUiThread {
+            val adapter = (rclTodoItems.adapter as TodoItemAdapter)
+            val itemsCheckedCount = adapter.countChecked()
+            val percent = if (adapter.getItems().isEmpty()) 100 else (itemsCheckedCount * 100) / adapter.getItems().size
 
-        alertDialog = alert(
-                "${percent}% finalizado. ",
-                "Progreso") {
-            okButton {
-                alertDialog = null
-                it.dismiss()
-            }
-        }.show()
+            alertDialog = alert(
+                    "${percent}% finalizado. ",
+                    "Progreso") {
+                okButton {
+                    alertDialog = null
+                    it.dismiss()
+                }
+            }.show()
+        }
     }
 
     override fun showEmptyPlaceholder() {
-        relEmpty.visibility = View.VISIBLE
+        runOnUiThread {
+            relEmpty.visibility = View.VISIBLE
+        }
     }
 
     override fun hideEmptyPlaceholder() {
-        relEmpty.visibility = View.GONE
+        runOnUiThread {
+            relEmpty.visibility = View.GONE
+        }
     }
-
 
 
     //AddItemDialogFragment

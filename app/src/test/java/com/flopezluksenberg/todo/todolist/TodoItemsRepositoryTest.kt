@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.flopezluksenberg.todo.ObjectMapperHelper
 import com.flopezluksenberg.todo.TodoItem
 import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.timeout
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Before
 import org.junit.Test
@@ -49,7 +50,7 @@ class TodoItemsRepositoryTest {
     fun test_get_items_and_list_is_null_should_call_onGetItemsNotSuccess_listener_method() {
         Mockito.`when`(sharedEditor.putString("items", null)).thenReturn(null)
         interactor.getItems(listener)
-        verify(listener).onGetItemsNotSuccess()
+        verify(listener,  timeout(1000).times(1)).onGetItemsNotSuccess()
     }
 
     @Test
@@ -57,14 +58,14 @@ class TodoItemsRepositoryTest {
         val items = arrayListOf(TodoItem("ads"))
         Mockito.`when`(sharedPreferences.getString("items", null)).thenReturn(objectMapper.writeValueAsString(items))
         interactor.getItems(listener)
-        verify(listener).onGetItemsSuccess(items)
+        verify(listener,  timeout(1000).times(1)).onGetItemsSuccess(items)
     }
 
     @Test
     fun test_get_items_and_list_has_wrong_mapped_objects_should_call_onGetItemsFailure_listener_method() {
         Mockito.`when`(sharedPreferences.getString("items", null)).thenReturn("This is a wrong object mapped data")
         interactor.getItems(listener)
-        verify(listener).onGetItemsFailure()
+        verify(listener, timeout(1000).times(1)).onGetItemsFailure()
     }
 
     @Test
